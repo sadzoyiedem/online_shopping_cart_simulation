@@ -1,5 +1,4 @@
 #include <iostream>
-#include "main.h"
 #include "function.h"
 #include <fstream>
 #include <sstream>
@@ -10,6 +9,10 @@ int main()
 {
   InventoryManager inventory_manager;
   inventory_manager.load_items("products.csv");
+  
+  main_menu();
+  // display_all_products(inventory_manager.get_products());
+  
 
 #if DEBUG
   divider();
