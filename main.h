@@ -19,8 +19,13 @@ private:
   std::vector<Item> products;
 
 public:
-  void load_items(const std::string &filename);
+  // getters
+  Item get_item_struct(int item_id) const;
+  int get_item_quantity(int item_id) const;
+  float get_item_price(int item_id) const;
 
+  void load_items(const std::string &filename);
+  void update_item_quantity(int item_id, int quantity_taken);
 };
 
 #endif
