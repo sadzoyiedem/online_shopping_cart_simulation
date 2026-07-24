@@ -39,6 +39,7 @@ Item InventoryManager::get_item_struct(int item_id) const
   }
 
   cout << "Item not found." << endl;
+  return {-1, "not found", 0.0, 0};
 }
 
 int InventoryManager::get_item_quantity(int item_id) const
