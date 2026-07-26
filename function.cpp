@@ -1,3 +1,4 @@
+// function.cpp
 #include "function.h"
 #include <iostream>
 #include <iomanip>
@@ -5,7 +6,7 @@
 
 using namespace std;
 
-// Column widths 
+// Column widths
 static const int W_ID = 6;
 static const int W_NAME = 30;
 static const int W_PRICE = 16;
@@ -66,6 +67,24 @@ void main_menu()
   divider();
 }
 
+void cart_menu_page()
+{
+  clear_screen();
+  divider();
+  cout << center_text("CART", 90) << endl;
+  divider();
+
+  cout << "What option would you like to explore?"
+       << "\n\t1. Add item"
+       << "\n\t2. Remove item"
+       << "\n\t3. Modify item Quantity"
+       << "\n\t4. Clear cart"
+       << "\n\t5. Move to checkout menu"
+       << "\n\t6. Go Back" << endl;
+
+  divider();
+}
+
 // Program functionalities
 void display_all_products(const vector<Item> &products)
 {
@@ -97,3 +116,32 @@ void display_all_products(const vector<Item> &products)
   table_divider();
 }
 
+void display_cart_items(const vector<Item> &cart_items)
+{
+  // clear_screen();
+
+  int table_width = W_ID + W_NAME + W_PRICE + W_QTY + 5;
+
+  cout << string(table_width, '-') << endl;
+  cout << center_text("Products Catalog", table_width) << endl;
+
+  table_divider();
+  cout << "|" << center_text("ID", W_ID)
+       << "|" << center_text("Product Name", W_NAME)
+       << "|" << center_text("Product Price", W_PRICE)
+       << "|" << center_text("Product Quantity", W_QTY)
+       << "|" << endl;
+  table_divider();
+
+  cout << fixed << setprecision(2);
+
+  for (const Item &cart_item : cart_items)
+  {
+    cout << "|" << center_text(to_string(cart_item.ID), W_ID)
+         << "|" << " " << left << setw(W_NAME - 1) << cart_item.Name
+         << "|" << " GHC" << right << setw(W_PRICE - 3) << cart_item.Price
+         << "|" << center_text(to_string(cart_item.Quantity), W_QTY)
+         << "|" << endl;
+  }
+  table_divider();
+}
