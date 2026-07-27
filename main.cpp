@@ -6,11 +6,14 @@
 
 using namespace std;
 
+const float tax_rate = 0.025; // tax rate in decimal percentage.
+
 int main()
 {
   // Creating objects on program startup
   InventoryManager inventory_manager;
   Cart cart;
+  Checkout checkout(tax_rate);
 
   inventory_manager.load_items("products.csv");
 
@@ -25,13 +28,23 @@ int main()
   cart.add_item(12, 1, inventory_manager);
   cart.add_item(15, 8, inventory_manager);
   display_cart_items(cart.get_cart_items());
-
+  
   cart.modify_quantity(14, 10);
-
+  
   // remove and item
   cart.remove_item(12);
   display_cart_items(cart.get_cart_items());
   // cout << cart.get_item_quantity(14) << endl;
+  #endif
+  
+  #if DEBUG
+  // cart.remove_item(14);
+  // cart.remove_item(5);
+  // cart.remove_item(15);
+  cout << "Checkout debugging" << endl;
+  cout << "Sub_total = " << checkout.calculate_sub_total(cart.get_cart_items()) << endl;
+  cout << "Tax = " << checkout.calculate_tax(checkout.calculate_sub_total(cart.get_cart_items())) << endl;
+
 #endif
 
 #if DEBUG
@@ -229,4 +242,20 @@ bool Cart::modify_quantity(int item_id, int new_quant)
     }
   }
   return false; // item wasn't in the cart
-} 
+}
+
+float Checkout::calculate_sub_total(std::vector<Item> cart_items) const
+{
+  if(cart_items.empty())
+    return 0.0f;
+
+  float sub_total{};
+  for (const Item &cart_item : cart_items)
+  {
+    sub_total += (cart_item.Quantity*cart_item.Price);
+  }
+
+  return sub_total;
+}
+
+

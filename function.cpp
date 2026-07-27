@@ -123,7 +123,7 @@ void display_cart_items(const vector<Item> &cart_items)
   int table_width = W_ID + W_NAME + W_PRICE + W_QTY + 5;
 
   cout << string(table_width, '-') << endl;
-  cout << center_text("Products Catalog", table_width) << endl;
+  cout << center_text("Products in Cart", table_width) << endl;
 
   table_divider();
   cout << "|" << center_text("ID", W_ID)

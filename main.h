@@ -46,4 +46,18 @@ public:
   bool modify_quantity(int item_id, int new_quant);
 };
 
+class Checkout
+{
+private:
+  float tax_rate;
+
+public:
+  Checkout(float t_r) : tax_rate(t_r) {}
+  float calculate_sub_total(std::vector<Item> cart_items) const;
+  float calculate_tax(float sub_total) { return sub_total * tax_rate; }
+  float calculate_delivery_fee(int delivery_time); // will write the code logic when combining everything to set up the program flow. 
+  float calculate_net_total(float sub_total, float tax, float delivery_fee);
+  void print_out_reciept();
+};
+
 #endif
