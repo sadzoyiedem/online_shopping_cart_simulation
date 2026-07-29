@@ -1,8 +1,6 @@
-// function.cpp
 #include "function.h"
 #include <iostream>
 #include <iomanip>
-#include <string>
 
 using namespace std;
 
@@ -11,8 +9,6 @@ static const int W_ID = 6;
 static const int W_NAME = 30;
 static const int W_PRICE = 16;
 static const int W_QTY = 18;
-
-// helper functions
 
 void clear_screen()
 {
@@ -32,7 +28,6 @@ void table_divider()
        << "+" << endl;
 }
 
-// Centers text within a given total width
 string center_text(const string &text, int width)
 {
   int total_pad = width - static_cast<int>(text.size());
@@ -85,7 +80,6 @@ void cart_menu_page()
   divider();
 }
 
-// Program functionalities
 void display_all_products(const vector<Item> &products)
 {
   clear_screen();
@@ -118,8 +112,6 @@ void display_all_products(const vector<Item> &products)
 
 void display_cart_items(const vector<Item> &cart_items)
 {
-  // clear_screen();
-
   int table_width = W_ID + W_NAME + W_PRICE + W_QTY + 5;
 
   cout << string(table_width, '-') << endl;
