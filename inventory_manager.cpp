@@ -1,9 +1,47 @@
-#include "InventoryManager.h"
+#include "inventory_manager.h"
+#include "function.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <iomanip>
 
 using namespace std;
+
+// Column widths
+static const int W_ID = 6;
+static const int W_NAME = 30;
+static const int W_PRICE = 16;
+static const int W_QTY = 18;
+
+void display_all_products(const vector<Item> &products)
+{
+  clear_screen();
+
+  int table_width = W_ID + W_NAME + W_PRICE + W_QTY + 5;
+
+  cout << string(table_width, '-') << endl;
+  cout << center_text("Products Catalog", table_width) << endl;
+
+  table_divider();
+  cout << "|" << center_text("ID", W_ID)
+       << "|" << center_text("Product Name", W_NAME)
+       << "|" << center_text("Product Price", W_PRICE)
+       << "|" << center_text("Product Quantity", W_QTY)
+       << "|" << endl;
+  table_divider();
+
+  cout << fixed << setprecision(2);
+
+  for (const Item &product : products)
+  {
+    cout << "|" << center_text(to_string(product.ID), W_ID)
+         << "|" << " " << left << setw(W_NAME - 1) << product.Name
+         << "|" << " GHC" << right << setw(W_PRICE - 3) << product.Price
+         << "|" << center_text(to_string(product.Quantity), W_QTY)
+         << "|" << endl;
+  }
+  table_divider();
+}
 
 Item InventoryManager::get_product(int item_id) const
 {

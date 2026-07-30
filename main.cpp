@@ -1,10 +1,10 @@
-#include <iostream>
 // #include "config.h"
 #include "item.h"
 #include "inventory_manager.h"
-#include "cart.h"
 #include "checkout.h"
-#include "function.h"
+#include "function.h" // function.h contains cart.h, iostream
+
+#define DEBUG 0
 
 using namespace std;
 
@@ -12,6 +12,7 @@ const float tax_rate = 0.025; // tax rate in decimal percentage.
 
 int main()
 {
+  // Instantiating object on program run.
   InventoryManager inventory_manager;
   Cart cart;
   Checkout checkout(tax_rate);
@@ -19,6 +20,27 @@ int main()
   inventory_manager.load_items("products.csv");
 
   main_menu();
+
+  int choice{};
+  cout << "Enter option: ";
+  while (input_validation(1, 4, choice))
+    ;
+
+  switch (choice)
+  {
+  case 1:
+    display_all_products(inventory_manager.get_products());
+    break;
+  case 2:
+    cart_menu_page();
+    cart_menu_page_flow(cart, inventory_manager);
+    break;
+  case 3:
+    checkout_menu_page();
+    break;
+  case 4:
+    return 0;
+  }
 
 #if DEBUG
   cart_menu_page();

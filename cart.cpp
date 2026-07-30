@@ -1,7 +1,52 @@
-#include "Cart.h"
+#include "function.h"
 #include <iostream>
+#include <iomanip>
 
 using namespace std;
+
+// Column widths
+static const int W_ID = 6;
+static const int W_NAME = 30;
+static const int W_PRICE = 16;
+static const int W_QTY = 18;
+
+void display_cart_items(const vector<Item> &cart_items)
+{
+  clear_screen();
+
+  if (cart_items.empty())
+  {
+    divider();
+    cout << "Sorry, cart is empty." << endl;
+    divider();
+    return;
+  }
+
+  int table_width = W_ID + W_NAME + W_PRICE + W_QTY + 5;
+
+  cout << string(table_width, '-') << endl;
+  cout << center_text("Products in Cart", table_width) << endl;
+
+  table_divider();
+  cout << "|" << center_text("ID", W_ID)
+       << "|" << center_text("Product Name", W_NAME)
+       << "|" << center_text("Product Price", W_PRICE)
+       << "|" << center_text("Product Quantity", W_QTY)
+       << "|" << endl;
+  table_divider();
+
+  cout << fixed << setprecision(2);
+
+  for (const Item &cart_item : cart_items)
+  {
+    cout << "|" << center_text(to_string(cart_item.ID), W_ID)
+         << "|" << " " << left << setw(W_NAME - 1) << cart_item.Name
+         << "|" << " GHC" << right << setw(W_PRICE - 3) << cart_item.Price
+         << "|" << center_text(to_string(cart_item.Quantity), W_QTY)
+         << "|" << endl;
+  }
+  table_divider();
+}
 
 int Cart::get_item_quantity(int item_id) const
 {
@@ -74,4 +119,157 @@ bool Cart::modify_quantity(int item_id, int new_quant)
     }
   }
   return false; // item wasn't in the cart
+}
+
+void cart_menu_page()
+{
+  clear_screen();
+  divider();
+  cout << center_text("CART", 90) << endl;
+  divider();
+
+  cout << "What option would you like to explore?"
+       << "\n\t1. Add item"
+       << "\n\t2. Remove item"
+       << "\n\t3. Modify item quantity"
+       << "\n\t4. Display cart items"
+       << "\n\t5. Clear cart"
+       << "\n\t6. Move to checkout menu"
+       << "\n\t7. Go Back" << endl;
+
+  divider();
+}
+
+void cart_menu_page_flow(Cart &cart, InventoryManager &inventory_manager)
+{
+  int choice;
+
+  cout << "Enter option: ";
+  while (input_validation(1, 7, choice))
+    ;
+
+  switch (choice)
+  {
+  case 1:
+  {
+
+    display_all_products(inventory_manager.get_products());
+
+    int product_id{}, quantity{};
+    get_item_id(product_id);
+    get_quantity(quantity);
+
+    while (quantity > inventory_manager.get_item_quantity(product_id))
+    {
+      cout << "Quantity in stock is less than the quantity you need. " << endl;
+      cout << "Quantity in stock: " << inventory_manager.get_item_quantity(product_id) << endl;
+      get_quantity(quantity);
+    }
+
+    if (cart.add_item(product_id, quantity, inventory_manager))
+      cout << "Added " << inventory_manager.get_product(product_id).Name << " to cart." << endl;
+    else
+      cerr << "Couldn't add product to cart. Try again" << endl;
+
+    hold_screen();
+    cart_menu_page();
+    cart_menu_page_flow(cart, inventory_manager);
+
+    break;
+  }
+
+  case 2:
+  {
+    clear_screen();
+
+    int product_id{};
+    get_item_id(product_id);
+
+    if (cart.remove_item(product_id))
+      cout << "Removed " << inventory_manager.get_product(product_id).Name << " from cart." << endl;
+    else
+      cerr << "Couldn't remove product from cart. Try again" << endl;
+
+    hold_screen();
+    cart_menu_page();
+    cart_menu_page_flow(cart, inventory_manager);
+
+    break;
+  }
+
+  case 3:
+  {
+    clear_screen();
+
+    int product_id{}, new_quantity{};
+    get_item_id(product_id);
+    get_quantity(new_quantity);
+
+    while (new_quantity > inventory_manager.get_item_quantity(product_id))
+    {
+      cout << "Quantity in stock is less than the quantity you need. " << endl;
+      cout << "Quantity in stock: " << inventory_manager.get_item_quantity(product_id) << endl;
+      get_quantity(new_quantity);
+    }
+
+    if (!cart.modify_quantity(product_id, new_quantity))
+      cerr << "Error! Couldn't modify item quantity." << endl;
+    else
+    {
+      cout << "Item quantity modified." << endl;
+      cout << "Product " << product_id << " new quantity: " << cart.get_item_quantity(product_id) << endl;
+    }
+
+    hold_screen();
+    cart_menu_page();
+    cart_menu_page_flow(cart, inventory_manager);
+
+    break;
+  }
+
+  case 4:
+  {
+    vector<Item> cart_items = cart.get_cart_items();
+    display_cart_items(cart_items);
+
+    hold_screen();
+    cart_menu_page();
+    cart_menu_page_flow(cart, inventory_manager);
+    break;
+  }
+  case 5:
+  {
+    clear_screen();
+
+    cart.clear_cart();
+
+    hold_screen();
+    cart_menu_page();
+    cart_menu_page_flow(cart, inventory_manager);
+
+    break;
+  }
+
+  case 6:
+  {
+    clear_screen();
+
+    vector<Item> cart_items = cart.get_cart_items();
+    if (cart_items.empty())
+    {
+      divider();
+      cout << "Cart is empty." << endl;
+      divider();
+    }
+    else
+      checkout_menu_page();
+    break;
+  }
+
+  case 7:
+  {
+    main_menu();
+    break;
+  }
+  }
 }

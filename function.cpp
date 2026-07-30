@@ -1,6 +1,7 @@
-#include "function.h"
-#include <iostream>
+#include "function.h" // function.h contains cart.h, iostream
 #include <iomanip>
+#include <iostream>
+#include <limits>
 
 using namespace std;
 
@@ -10,6 +11,7 @@ static const int W_NAME = 30;
 static const int W_PRICE = 16;
 static const int W_QTY = 18;
 
+// Helper functions
 void clear_screen()
 {
 #ifdef _WIN32
@@ -43,6 +45,63 @@ void divider()
   cout << string(101, '-') << endl;
 }
 
+bool input_validation(int min, int max, int &user_opt)
+{
+  int option{};
+  cin >> option;
+
+  if (cin.fail() || option < min || option > max)
+  {
+    cin.clear();
+    cin.ignore(1000, '\n');
+
+    cout << "Invalid option entered!\nRe-enter option: ";
+
+    return true;
+  }
+
+  user_opt = option;
+
+  return false;
+}
+
+void get_item_id(int &product_id)
+{
+  cout << "Enter the product ID: ";
+  cin >> product_id;
+
+  while(cin.fail() || product_id < 0)
+  {
+    cin.ignore(1000,'\n');
+    cin.clear();
+    cerr << "Invalid input. Re-enter quantity: ";
+    cin >> product_id;
+  }
+}
+
+void get_quantity(int &quant)
+{
+  cout << "Enter the quantity: ";
+  cin >> quant;
+
+  while(cin.fail() || quant < 0)
+  {
+    cin.ignore(1000,'\n');
+    cin.clear();
+    cerr << "Invalid input. Re-enter quantity: ";
+    cin >> quant;
+  }
+
+}
+
+void hold_screen()
+{
+  cout << "\nPress Enter to continue...";
+  cin.ignore(numeric_limits<streamsize>::max(), '\n');
+  cin.get();
+}
+
+// Program functions
 void main_menu()
 {
   clear_screen();
@@ -54,86 +113,31 @@ void main_menu()
 
   cout << "What option would you like to explore:"
        << "\n\t1. View all products."
-       << "\n\t2. Search for product."
-       << "\n\t3. Move to cart."
-       << "\n\t4. Move to checkout."
-       << "\n\t5. Exit program." << endl;
+       << "\n\t2. Move to cart."
+       << "\n\t3. Move to checkout."
+       << "\n\t4. Exit program." << endl;
 
   divider();
 }
 
-void cart_menu_page()
+void checkout_menu_page()
 {
   clear_screen();
   divider();
-  cout << center_text("CART", 90) << endl;
+  cout << center_text("CHECKOUT", 90) << endl;
   divider();
 
   cout << "What option would you like to explore?"
-       << "\n\t1. Add item"
-       << "\n\t2. Remove item"
-       << "\n\t3. Modify item Quantity"
-       << "\n\t4. Clear cart"
-       << "\n\t5. Move to checkout menu"
-       << "\n\t6. Go Back" << endl;
+       << "\n\t1. Set delivery time"
+       << "\n\t2. Checkout"
+       << "\n\t3. Move to cart menu"
+       << "\n\t4. Go Back" << endl;
 
   divider();
 }
 
-void display_all_products(const vector<Item> &products)
-{
-  clear_screen();
 
-  int table_width = W_ID + W_NAME + W_PRICE + W_QTY + 5;
 
-  cout << string(table_width, '-') << endl;
-  cout << center_text("Products Catalog", table_width) << endl;
 
-  table_divider();
-  cout << "|" << center_text("ID", W_ID)
-       << "|" << center_text("Product Name", W_NAME)
-       << "|" << center_text("Product Price", W_PRICE)
-       << "|" << center_text("Product Quantity", W_QTY)
-       << "|" << endl;
-  table_divider();
 
-  cout << fixed << setprecision(2);
 
-  for (const Item &product : products)
-  {
-    cout << "|" << center_text(to_string(product.ID), W_ID)
-         << "|" << " " << left << setw(W_NAME - 1) << product.Name
-         << "|" << " GHC" << right << setw(W_PRICE - 3) << product.Price
-         << "|" << center_text(to_string(product.Quantity), W_QTY)
-         << "|" << endl;
-  }
-  table_divider();
-}
-
-void display_cart_items(const vector<Item> &cart_items)
-{
-  int table_width = W_ID + W_NAME + W_PRICE + W_QTY + 5;
-
-  cout << string(table_width, '-') << endl;
-  cout << center_text("Products in Cart", table_width) << endl;
-
-  table_divider();
-  cout << "|" << center_text("ID", W_ID)
-       << "|" << center_text("Product Name", W_NAME)
-       << "|" << center_text("Product Price", W_PRICE)
-       << "|" << center_text("Product Quantity", W_QTY)
-       << "|" << endl;
-  table_divider();
-
-  cout << fixed << setprecision(2);
-
-  for (const Item &cart_item : cart_items)
-  {
-    cout << "|" << center_text(to_string(cart_item.ID), W_ID)
-         << "|" << " " << left << setw(W_NAME - 1) << cart_item.Name
-         << "|" << " GHC" << right << setw(W_PRICE - 3) << cart_item.Price
-         << "|" << center_text(to_string(cart_item.Quantity), W_QTY)
-         << "|" << endl;
-  }
-  table_divider();
-}

@@ -22,4 +22,7 @@ public:
   bool update_item_quantity(int item_id, int quantity_taken);
 };
 
+// function declarations
+void display_all_products(const std::vector<Item> &products);
+
 #endif
