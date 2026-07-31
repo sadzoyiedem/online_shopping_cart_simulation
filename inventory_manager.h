@@ -19,7 +19,8 @@ public:
 
   void load_items(const std::string &filename);
   // modify quantity of products in stock when a user adds an item to the cart.
-  bool update_item_quantity(int item_id, int quantity_taken);
+  bool decrease_item_quantity(int item_id, int quantity_taken);
+  bool increase_item_quantity(int item_id, int quantity_taken);
 };
 
 // function declarations

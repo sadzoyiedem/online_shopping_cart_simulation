@@ -32,7 +32,7 @@ public:
 // functions
 void cart_menu_page();
 void display_cart_items(const std::vector<Item> &cart_items);
-void cart_menu_page_flow(Cart &cart, InventoryManager &inventory_manager);
+bool cart_menu_page_flow(Cart &cart, InventoryManager &inventory_manager);
 
 
 #endif

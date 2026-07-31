@@ -21,26 +21,42 @@ int main()
 
   main_menu();
 
-  int choice{};
-  cout << "Enter option: ";
-  while (input_validation(1, 4, choice))
-    ;
+  bool running = true;
 
-  switch (choice)
+  do
   {
-  case 1:
-    display_all_products(inventory_manager.get_products());
-    break;
-  case 2:
-    cart_menu_page();
-    cart_menu_page_flow(cart, inventory_manager);
-    break;
-  case 3:
-    checkout_menu_page();
-    break;
-  case 4:
-    return 0;
-  }
+    int choice{};
+    cout << "Enter option: ";
+    while (input_validation(1, 4, choice))
+      ;
+
+    switch (choice)
+    {
+    case 1:
+      display_all_products(inventory_manager.get_products());
+      hold_screen();
+      main_menu();
+      break;
+    case 2:
+    {
+      bool is_running = true;
+      while (is_running)
+      {
+        cart_menu_page();
+        is_running = cart_menu_page_flow(cart, inventory_manager);
+      }
+      break;
+    }
+    case 3:
+      checkout_menu_page();
+      // TODO : call checkout_menu_page_flow once written. 4
+      break;
+    case 4:
+      //Todo: write exit function to display an exit message. 
+      running = false;
+      return 0;
+    }
+  } while (running);
 
 #if DEBUG
   cart_menu_page();

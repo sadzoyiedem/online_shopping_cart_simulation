@@ -140,7 +140,7 @@ void cart_menu_page()
   divider();
 }
 
-void cart_menu_page_flow(Cart &cart, InventoryManager &inventory_manager)
+bool cart_menu_page_flow(Cart &cart, InventoryManager &inventory_manager)
 {
   int choice;
 
@@ -150,13 +150,20 @@ void cart_menu_page_flow(Cart &cart, InventoryManager &inventory_manager)
 
   switch (choice)
   {
-  case 1:
+  case 1: // add item
   {
-
     display_all_products(inventory_manager.get_products());
 
     int product_id{}, quantity{};
     get_item_id(product_id);
+
+    if (inventory_manager.get_item_quantity(product_id) == -1)
+    {
+      cerr << "Item ID not found." << endl;
+      hold_screen();
+      break;
+    }
+
     get_quantity(quantity);
 
     while (quantity > inventory_manager.get_item_quantity(product_id))
@@ -167,48 +174,64 @@ void cart_menu_page_flow(Cart &cart, InventoryManager &inventory_manager)
     }
 
     if (cart.add_item(product_id, quantity, inventory_manager))
+    {
       cout << "Added " << inventory_manager.get_product(product_id).Name << " to cart." << endl;
+      inventory_manager.decrease_item_quantity(product_id, quantity);
+    }
     else
-      cerr << "Couldn't add product to cart. Try again" << endl;
+      cerr << "Error!, couldn't add product to cart. Try again" << endl;
 
     hold_screen();
-    cart_menu_page();
-    cart_menu_page_flow(cart, inventory_manager);
-
     break;
   }
 
-  case 2:
+  case 2: // remove item
   {
     clear_screen();
+    if(cart.get_cart_items().empty())
+    {
+      cout << "Cart is empty." << endl;
+      break;
+    }
 
     int product_id{};
     get_item_id(product_id);
 
+    int quantity = cart.get_item_quantity(product_id);
+
     if (cart.remove_item(product_id))
+    {
+      inventory_manager.increase_item_quantity(product_id, quantity);
       cout << "Removed " << inventory_manager.get_product(product_id).Name << " from cart." << endl;
+    }
     else
-      cerr << "Couldn't remove product from cart. Try again" << endl;
+      cerr << "Error!, couldn't remove product from cart. Try again" << endl;
 
     hold_screen();
-    cart_menu_page();
-    cart_menu_page_flow(cart, inventory_manager);
-
     break;
   }
 
-  case 3:
+  case 3: // modify item quantity
   {
     clear_screen();
 
     int product_id{}, new_quantity{};
     get_item_id(product_id);
+
+    if (inventory_manager.get_item_quantity(product_id) == -1)
+    {
+      cerr << "Item ID not found." << endl;
+      hold_screen();
+      break;
+    }
+
+    int old_quantity = cart.get_item_quantity(product_id);
     get_quantity(new_quantity);
 
-    while (new_quantity > inventory_manager.get_item_quantity(product_id))
+    while (new_quantity > inventory_manager.get_item_quantity(product_id) + old_quantity)
     {
       cout << "Quantity in stock is less than the quantity you need. " << endl;
-      cout << "Quantity in stock: " << inventory_manager.get_item_quantity(product_id) << endl;
+      cout << "Quantity available: " << inventory_manager.get_item_quantity(product_id) + old_quantity << endl;
       get_quantity(new_quantity);
     }
 
@@ -216,60 +239,68 @@ void cart_menu_page_flow(Cart &cart, InventoryManager &inventory_manager)
       cerr << "Error! Couldn't modify item quantity." << endl;
     else
     {
+      if (old_quantity > new_quantity)
+        inventory_manager.increase_item_quantity(product_id, old_quantity - new_quantity);
+      else if (old_quantity < new_quantity)
+        inventory_manager.decrease_item_quantity(product_id, new_quantity - old_quantity);
+
       cout << "Item quantity modified." << endl;
       cout << "Product " << product_id << " new quantity: " << cart.get_item_quantity(product_id) << endl;
     }
 
     hold_screen();
-    cart_menu_page();
-    cart_menu_page_flow(cart, inventory_manager);
-
     break;
   }
 
-  case 4:
+  case 4: // view cart
   {
-    vector<Item> cart_items = cart.get_cart_items();
-    display_cart_items(cart_items);
+    clear_screen();
+    display_cart_items(cart.get_cart_items());
 
     hold_screen();
-    cart_menu_page();
-    cart_menu_page_flow(cart, inventory_manager);
     break;
   }
-  case 5:
+
+  case 5: // clear cart
   {
     clear_screen();
 
+    for (const Item &cart_item : cart.get_cart_items())
+    {
+      inventory_manager.increase_item_quantity(cart_item.ID, cart_item.Quantity);
+    }
     cart.clear_cart();
 
+    cout << "Cart cleared." << endl;
     hold_screen();
-    cart_menu_page();
-    cart_menu_page_flow(cart, inventory_manager);
-
     break;
   }
 
-  case 6:
+  case 6: // move to checkout
   {
     clear_screen();
 
-    vector<Item> cart_items = cart.get_cart_items();
-    if (cart_items.empty())
+    if (cart.get_cart_items().empty())
     {
       divider();
       cout << "Cart is empty." << endl;
       divider();
+      hold_screen();
     }
     else
+    {
       checkout_menu_page();
+      // TODO: call checkout_menu_page_flow(cart, inventory_manager, checkout) once written
+    }
     break;
   }
 
-  case 7:
+  case 7: // go back
   {
     main_menu();
-    break;
+    return false;
   }
   }
+
+  return true;
 }

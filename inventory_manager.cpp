@@ -126,7 +126,7 @@ void InventoryManager::load_items(const string &filename)
 }
 
 // reduce the quantity of item in stock when user adds an item to the cart.
-bool InventoryManager::update_item_quantity(int item_id, int quantity_taken)
+bool InventoryManager::decrease_item_quantity(int item_id, int quantity_taken)
 {
   for (int i = 0; i < products.size(); i++)
   {
@@ -137,7 +137,29 @@ bool InventoryManager::update_item_quantity(int item_id, int quantity_taken)
         cout << "Error: not enough stock for item " << item_id << endl;
         return false;
       }
+
       products[i].Quantity -= quantity_taken;
+      cout << "Item " << item_id << " quantity updated.\nNew quantity: " << products[i].Quantity << endl;
+      return true;
+    }
+  }
+
+  cout << "Item with ID " << item_id << " not found." << endl;
+  return false;
+}
+bool InventoryManager::increase_item_quantity(int item_id, int quantity_added)
+{
+  for (int i = 0; i < products.size(); i++)
+  {
+    if (products[i].ID == item_id)
+    {
+      if (quantity_added > products[i].Quantity)
+      {
+        cout << "Error: not enough stock for item " << item_id << endl;
+        return false;
+      }
+
+      products[i].Quantity += quantity_added;
       cout << "Item " << item_id << " quantity updated.\nNew quantity: " << products[i].Quantity << endl;
       return true;
     }
