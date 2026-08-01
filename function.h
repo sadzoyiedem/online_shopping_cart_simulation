@@ -13,14 +13,13 @@ void divider();
 std::string center_text(const std::string &text, int width);
 void table_divider();
 bool input_validation(int min, int max, int &user_opt);
-void get_item_id(int &product_id);
-void get_quantity(int &quant);
+bool get_item_id(int &product_id);
+bool get_quantity(int &quant);
 void hold_screen();
+void get_delivery_time(int &delivery_op);
 
 // menu screens
 void main_menu();
-
-void checkout_menu_page();
 
 // program functionalities
 

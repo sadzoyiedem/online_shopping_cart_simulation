@@ -65,33 +65,34 @@ bool input_validation(int min, int max, int &user_opt)
   return false;
 }
 
-void get_item_id(int &product_id)
+bool get_item_id(int &product_id)
 {
-  cout << "Enter the product ID: ";
   cin >> product_id;
 
-  while(cin.fail() || product_id < 0)
+  if (cin.fail() || product_id < 0)
   {
-    cin.ignore(1000,'\n');
     cin.clear();
-    cerr << "Invalid input. Re-enter quantity: ";
-    cin >> product_id;
+    cin.ignore(1000, '\n');
+    cerr << "Invalid input.\t Re-enter product ID: ";
+    return true;
   }
+
+  return false;
 }
 
-void get_quantity(int &quant)
+bool get_quantity(int &quant)
 {
-  cout << "Enter the quantity: ";
   cin >> quant;
 
-  while(cin.fail() || quant < 0)
+  if (cin.fail() || quant < 0)
   {
-    cin.ignore(1000,'\n');
     cin.clear();
-    cerr << "Invalid input. Re-enter quantity: ";
-    cin >> quant;
+    cin.ignore(1000, '\n');
+    cerr << "Invalid input. \t Re-enter quantity: ";
+    return true;
   }
 
+  return false;
 }
 
 void hold_screen()
@@ -120,24 +121,16 @@ void main_menu()
   divider();
 }
 
-void checkout_menu_page()
+void get_delivery_time(int &delivery_op)
 {
-  clear_screen();
-  divider();
-  cout << center_text("CHECKOUT", 90) << endl;
-  divider();
+  cout << "Enter the quantity: ";
+  cin >> delivery_op;
 
-  cout << "What option would you like to explore?"
-       << "\n\t1. Set delivery time"
-       << "\n\t2. Checkout"
-       << "\n\t3. Move to cart menu"
-       << "\n\t4. Go Back" << endl;
-
-  divider();
+  while (cin.fail() || delivery_op <= 0 || delivery_op > 3)
+  {
+    cin.ignore(1000, '\n');
+    cin.clear();
+    cerr << "Invalid input. Re-enter quantity: ";
+    cin >> delivery_op;
+  }
 }
-
-
-
-
-
-

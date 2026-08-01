@@ -48,11 +48,18 @@ int main()
       break;
     }
     case 3:
-      checkout_menu_page();
-      // TODO : call checkout_menu_page_flow once written. 4
+    {
+      bool is_running = true;
+      while (is_running)
+      {
+        checkout_menu_page();
+        is_running = checkout_menu_page_flow(cart, inventory_manager);
+        // TODO : call checkout_menu_page_flow once written. 4
+      }
       break;
+    }
     case 4:
-      //Todo: write exit function to display an exit message. 
+      // Todo: write exit function to display an exit message.
       running = false;
       return 0;
     }

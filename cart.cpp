@@ -1,4 +1,5 @@
 #include "function.h"
+#include "checkout.h"
 #include <iostream>
 #include <iomanip>
 
@@ -155,7 +156,9 @@ bool cart_menu_page_flow(Cart &cart, InventoryManager &inventory_manager)
     display_all_products(inventory_manager.get_products());
 
     int product_id{}, quantity{};
-    get_item_id(product_id);
+    cout << "Enter the product ID: ";
+    while (get_item_id(product_id))
+      ;
 
     if (inventory_manager.get_item_quantity(product_id) == -1)
     {
@@ -164,7 +167,9 @@ bool cart_menu_page_flow(Cart &cart, InventoryManager &inventory_manager)
       break;
     }
 
-    get_quantity(quantity);
+    cout << "Enter the quantity: ";
+    while (get_quantity(quantity))
+      ;
 
     while (quantity > inventory_manager.get_item_quantity(product_id))
     {
@@ -188,7 +193,7 @@ bool cart_menu_page_flow(Cart &cart, InventoryManager &inventory_manager)
   case 2: // remove item
   {
     clear_screen();
-    if(cart.get_cart_items().empty())
+    if (cart.get_cart_items().empty())
     {
       cout << "Cart is empty." << endl;
       break;
