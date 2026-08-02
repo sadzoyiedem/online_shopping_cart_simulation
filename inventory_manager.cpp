@@ -139,7 +139,10 @@ bool InventoryManager::decrease_item_quantity(int item_id, int quantity_taken)
       }
 
       products[i].Quantity -= quantity_taken;
+#if DEBUG
       cout << "Item " << item_id << " quantity updated.\nNew quantity: " << products[i].Quantity << endl;
+#endif
+
       return true;
     }
   }
@@ -160,7 +163,10 @@ bool InventoryManager::increase_item_quantity(int item_id, int quantity_added)
       }
 
       products[i].Quantity += quantity_added;
+#if DEBUG
       cout << "Item " << item_id << " quantity updated.\nNew quantity: " << products[i].Quantity << endl;
+#endif
+
       return true;
     }
   }

@@ -16,7 +16,7 @@ bool input_validation(int min, int max, int &user_opt);
 bool get_item_id(int &product_id);
 bool get_quantity(int &quant);
 void hold_screen();
-void get_delivery_time(int &delivery_op);
+bool get_delivery_time(int &delivery_op);
 
 // menu screens
 void main_menu();

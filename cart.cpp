@@ -141,7 +141,7 @@ void cart_menu_page()
   divider();
 }
 
-bool cart_menu_page_flow(Cart &cart, InventoryManager &inventory_manager)
+bool cart_menu_page_flow(Cart &cart, InventoryManager &inventory_manager, Checkout &checkout)
 {
   int choice;
 
@@ -175,6 +175,7 @@ bool cart_menu_page_flow(Cart &cart, InventoryManager &inventory_manager)
     {
       cout << "Quantity in stock is less than the quantity you need. " << endl;
       cout << "Quantity in stock: " << inventory_manager.get_item_quantity(product_id) << endl;
+      cout << "Re-enter quantity: ";
       get_quantity(quantity);
     }
 
@@ -200,9 +201,11 @@ bool cart_menu_page_flow(Cart &cart, InventoryManager &inventory_manager)
     }
 
     int product_id{};
-    get_item_id(product_id);
+    cout << "Enter product ID:";
+    while (get_item_id(product_id))
+      ;
 
-    int quantity = cart.get_item_quantity(product_id);
+    int quantity = cart.get_item_quantity(product_id); // get item to be removed quantity from cart database.
 
     if (cart.remove_item(product_id))
     {
@@ -221,7 +224,10 @@ bool cart_menu_page_flow(Cart &cart, InventoryManager &inventory_manager)
     clear_screen();
 
     int product_id{}, new_quantity{};
-    get_item_id(product_id);
+
+    cout << "Enter product ID: ";
+    while (get_item_id(product_id))
+      ;
 
     if (inventory_manager.get_item_quantity(product_id) == -1)
     {
@@ -231,7 +237,9 @@ bool cart_menu_page_flow(Cart &cart, InventoryManager &inventory_manager)
     }
 
     int old_quantity = cart.get_item_quantity(product_id);
-    get_quantity(new_quantity);
+    cout << "Enter new quantity: ";
+    while (get_quantity(new_quantity))
+      ;
 
     while (new_quantity > inventory_manager.get_item_quantity(product_id) + old_quantity)
     {
@@ -294,8 +302,12 @@ bool cart_menu_page_flow(Cart &cart, InventoryManager &inventory_manager)
     }
     else
     {
-      checkout_menu_page();
-      // TODO: call checkout_menu_page_flow(cart, inventory_manager, checkout) once written
+      bool is_running = true;
+      while (is_running)
+      {
+        checkout_menu_page();
+        is_running = checkout_menu_page_flow(cart, inventory_manager, checkout);
+      }
     }
     break;
   }

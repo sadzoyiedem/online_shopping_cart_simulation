@@ -10,6 +10,7 @@ static const int W_ID = 6;
 static const int W_NAME = 30;
 static const int W_PRICE = 16;
 static const int W_QTY = 18;
+static const int W_TOTAL_COST = 16;
 
 // Helper functions
 void clear_screen()
@@ -27,6 +28,7 @@ void table_divider()
        << "+" << string(W_NAME, '-')
        << "+" << string(W_PRICE, '-')
        << "+" << string(W_QTY, '-')
+       << "+" << string(W_TOTAL_COST, '-')
        << "+" << endl;
 }
 
@@ -121,16 +123,17 @@ void main_menu()
   divider();
 }
 
-void get_delivery_time(int &delivery_op)
+bool get_delivery_time(int &delivery_op)
 {
-  cout << "Enter the quantity: ";
   cin >> delivery_op;
 
-  while (cin.fail() || delivery_op <= 0 || delivery_op > 3)
+  if (cin.fail() || delivery_op <= 0 || delivery_op > 3)
   {
     cin.ignore(1000, '\n');
     cin.clear();
-    cerr << "Invalid input. Re-enter quantity: ";
-    cin >> delivery_op;
+    cerr << "Invalid input. Re-enter delivery time: ";
+    return true;
   }
+
+  return false;
 }

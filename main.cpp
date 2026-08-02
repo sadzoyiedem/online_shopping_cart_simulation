@@ -32,33 +32,32 @@ int main()
 
     switch (choice)
     {
-    case 1:
+    case 1: // display all products.
       display_all_products(inventory_manager.get_products());
       hold_screen();
       main_menu();
       break;
-    case 2:
+    case 2: // cart page
     {
       bool is_running = true;
       while (is_running)
       {
         cart_menu_page();
-        is_running = cart_menu_page_flow(cart, inventory_manager);
+        is_running = cart_menu_page_flow(cart, inventory_manager,checkout);
       }
       break;
     }
-    case 3:
+    case 3: // checkout page
     {
       bool is_running = true;
       while (is_running)
       {
         checkout_menu_page();
-        is_running = checkout_menu_page_flow(cart, inventory_manager);
-        // TODO : call checkout_menu_page_flow once written. 4
+        is_running = checkout_menu_page_flow(cart, inventory_manager, checkout);
       }
       break;
     }
-    case 4:
+    case 4: // exit
       // Todo: write exit function to display an exit message.
       running = false;
       return 0;
