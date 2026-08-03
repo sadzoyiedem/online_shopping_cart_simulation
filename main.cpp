@@ -10,6 +10,8 @@ using namespace std;
 
 const float tax_rate = 0.025; // tax rate in decimal percentage.
 
+void main_menu();
+
 int main()
 {
   // Instantiating object on program run.
@@ -58,8 +60,7 @@ int main()
       break;
     }
     case 4: // exit
-      // Todo: write exit function to display an exit message.
-      running = false;
+      exit_message();
       return 0;
     }
   } while (running);
@@ -100,4 +101,22 @@ int main()
 #endif
 
   return 0;
+}
+
+void main_menu()
+{
+  clear_screen();
+  divider();
+  cout << center_text("GROUP 14 Online Shopping Cart Simulation", 101) << endl;
+  divider();
+
+  cout << "Welcome!" << endl;
+
+  cout << "What option would you like to explore:"
+       << "\n\t1. View all products."
+       << "\n\t2. Move to cart."
+       << "\n\t3. Move to checkout."
+       << "\n\t4. Exit program." << endl;
+
+  divider();
 }

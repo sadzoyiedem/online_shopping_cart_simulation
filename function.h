@@ -17,10 +17,6 @@ bool get_item_id(int &product_id);
 bool get_quantity(int &quant);
 void hold_screen();
 bool get_delivery_time(int &delivery_op);
-
-// menu screens
 void main_menu();
-
-// program functionalities
-
+void exit_message();
 #endif

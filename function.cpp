@@ -104,36 +104,25 @@ void hold_screen()
   cin.get();
 }
 
-// Program functions
-void main_menu()
-{
-  clear_screen();
-  divider();
-  cout << center_text("GROUP 14 Online Shopping Cart Simulation", 101) << endl;
-  divider();
-
-  cout << "Welcome!" << endl;
-
-  cout << "What option would you like to explore:"
-       << "\n\t1. View all products."
-       << "\n\t2. Move to cart."
-       << "\n\t3. Move to checkout."
-       << "\n\t4. Exit program." << endl;
-
-  divider();
-}
-
 bool get_delivery_time(int &delivery_op)
 {
   cin >> delivery_op;
 
   if (cin.fail() || delivery_op <= 0 || delivery_op > 3)
   {
-    cin.ignore(1000, '\n');
     cin.clear();
+    cin.ignore(1000, '\n');
     cerr << "Invalid input. Re-enter delivery time: ";
     return true;
   }
 
   return false;
+}
+
+void exit_message()
+{ 
+  clear_screen();
+  divider();
+  cout << "Thank you for using this program.\nSee you next time." << endl;
+  divider();
 }

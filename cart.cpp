@@ -95,6 +95,7 @@ bool Cart::add_item(int item_id, int quantity, InventoryManager &inventory_manag
 
 bool Cart::remove_item(int item_id)
 {
+
   for (int i = 0; i < cart_items.size(); i++)
   {
     if (cart_items[i].ID == item_id)
@@ -196,9 +197,12 @@ bool cart_menu_page_flow(Cart &cart, InventoryManager &inventory_manager, Checko
     clear_screen();
     if (cart.get_cart_items().empty())
     {
-      cout << "Cart is empty." << endl;
+      cout << "Sorry, cart is empty." << endl;
+      hold_screen();
       break;
     }
+
+    display_cart_items(cart.get_cart_items());
 
     int product_id{};
     cout << "Enter product ID:";
@@ -222,6 +226,14 @@ bool cart_menu_page_flow(Cart &cart, InventoryManager &inventory_manager, Checko
   case 3: // modify item quantity
   {
     clear_screen();
+    if (cart.get_cart_items().empty())
+    {
+      cout << "Sorry, cart is empty." << endl;
+      hold_screen();
+      break;
+    }
+
+    display_cart_items(cart.get_cart_items());
 
     int product_id{}, new_quantity{};
 
@@ -257,6 +269,8 @@ bool cart_menu_page_flow(Cart &cart, InventoryManager &inventory_manager, Checko
       else if (old_quantity < new_quantity)
         inventory_manager.decrease_item_quantity(product_id, new_quantity - old_quantity);
 
+      cout << endl;
+      divider();
       cout << "Item quantity modified." << endl;
       cout << "Product " << product_id << " new quantity: " << cart.get_item_quantity(product_id) << endl;
     }
@@ -296,7 +310,7 @@ bool cart_menu_page_flow(Cart &cart, InventoryManager &inventory_manager, Checko
     if (cart.get_cart_items().empty())
     {
       divider();
-      cout << "Cart is empty." << endl;
+      cout << "Cart is empty. Cannot proceed to checkout." << endl;
       divider();
       hold_screen();
     }
