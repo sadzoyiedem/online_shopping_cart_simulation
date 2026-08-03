@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <string>
-#include "Item.h"
+#include "item.h"
 #include "cart.h"
 #include "inventory_manager.h"
 

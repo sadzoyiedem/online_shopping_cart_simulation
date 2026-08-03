@@ -2,11 +2,11 @@
 #define CHECKOUT_H
 
 #include <vector>
-#include "Item.h"
+#include "item.h"
 
 // forward declarations
-class Cart;             
-class InventoryManager; 
+class Cart;
+class InventoryManager;
 
 class Checkout
 {
@@ -15,7 +15,7 @@ private:
   int delivery_time_op;
 
 public:
-  Checkout(float t_r) : tax_rate(t_r) {}
+  Checkout(float t_r) : tax_rate(t_r), delivery_time_op(0) {}
 
   void set_del_op(int d_o) { delivery_time_op = d_o; }
   int get_deliv_time_op() { return delivery_time_op; }

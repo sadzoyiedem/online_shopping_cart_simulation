@@ -156,12 +156,6 @@ bool InventoryManager::increase_item_quantity(int item_id, int quantity_added)
   {
     if (products[i].ID == item_id)
     {
-      if (quantity_added > products[i].Quantity)
-      {
-        cout << "Error: not enough stock for item " << item_id << endl;
-        return false;
-      }
-
       products[i].Quantity += quantity_added;
 #if DEBUG
       cout << "Item " << item_id << " quantity updated.\nNew quantity: " << products[i].Quantity << endl;
